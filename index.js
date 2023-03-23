@@ -3,15 +3,14 @@ import getLocalStorageInfo from "./components/getLocalStorageInfo.js";
 import filterTodos from "./components/filterTodos.js";
 // import addTodo from "./components/addTodo.js";
 let todos = [];
+let filterValue = localStorage.getItem("filterState") ?? "all";
 const todoContainer = document.querySelector(".app-body");
 const todoInput = document.querySelector(".app-header__input");
 const addTodoButton = document.querySelector(".app-header__button");
-const filterValue = localStorage.getItem("filterState") ?? "all";
-console.log(filterValue);
+
 const todoSelector = document.querySelectorAll(
   ".app-header__todo-status-selector"
 );
-
 const loadHandler = () => {
   todos = getLocalStorageInfo("todos");
   for (let radio of todoSelector) {
@@ -23,6 +22,7 @@ const loadHandler = () => {
 };
 
 function addTodoHandler() {
+  /////////////////////////////////////////////////////////////
   const newTodo = {
     id: Date.now(),
     text: todoInput.value,
@@ -33,7 +33,8 @@ function addTodoHandler() {
   localStorage.setItem("todos", JSON.stringify(todos));
   todoContainer.innerHTML = "";
   todoInput.value = "";
-  todoPrinter(todos, todoContainer, deleteTodo);
+
+  filterTodos({ todos, filterValue, todoPrinter, todoContainer });
 }
 
 const handleTodo = (e) => {
@@ -46,8 +47,10 @@ const deleteTodo = (e) => {
     const filteredTodos = todos.filter((todo) => todo.id != e.target.id);
     todos = filteredTodos;
     localStorage.setItem("todos", JSON.stringify(todos));
+    // console.log("filterTodos");
     todoContainer.innerHTML = "";
-    todoPrinter(todos, todoContainer, deleteTodo);
+    console.log("filterTodos acted");
+    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
   }
 };
 const setChecker = (e) => {
@@ -65,19 +68,22 @@ const setChecker = (e) => {
 }; /////////////////не меняется состояние чекера
 
 window.addEventListener("load", loadHandler);
+
+for (const radio of todoSelector) {
+  radio.addEventListener("click", () => {
+    localStorage.setItem("filterState", radio.value);
+    filterValue = radio.value;
+    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+  });
+}
+
 addTodoButton.addEventListener("click", () => addTodoHandler());
+
 todoInput.addEventListener("keydown", (e) => {
   if (e.which == 13 || e.keyCode == 13) {
     e.preventDefault();
     addTodoHandler();
   }
 });
-todoContainer.addEventListener("click", (e) => handleTodo(e));
 
-for (const radio of todoSelector) {
-  radio.addEventListener("click", () => {
-    localStorage.setItem("filterState", radio.value);
-    const filterValue = radio.value;
-    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
-  });
-}
+todoContainer.addEventListener("click", (e) => handleTodo(e));

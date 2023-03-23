@@ -1,6 +1,6 @@
 import filterTodos from "./filterTodos.js";
 
-export default function todoPrinter(todos, container, activeTodoCounter = "0") {
+export default function todoPrinter(todos, container, activeTodoCounter) {
   if (!todos.length) {
     container.innerHTML = "<h2>No todos</h2>";
     return;
