@@ -3,9 +3,11 @@ import getLocalStorageInfo from './components/getLocalStorageInfo.js';
 import filterTodos from './components/filterTodos.js';
 let todos = [];
 let filterValue = localStorage.getItem('filterState') ?? 'all';
+let todoId = 0;
+let editSetter = false;
 const todoContainer = document.querySelector('.app-body');
 const todoInput = document.querySelector('.app-header__input');
-const addTodoButton = document.querySelector('.app-header__button');
+const addTodoButton = document.querySelector('#addButton');
 const todoSelector = document.querySelectorAll(
   '.app-header__todo-status-selector'
 );
@@ -19,7 +21,7 @@ const loadHandler = () => {
   filterTodos({ todos, filterValue, todoPrinter, todoContainer });
 };
 
-function addTodoHandler() {
+const addTodoHandler = () => {
   const newTodo = {
     id: Date.now(),
     text: todoInput.value,
@@ -32,36 +34,62 @@ function addTodoHandler() {
   todoInput.value = '';
 
   filterTodos({ todos, filterValue, todoPrinter, todoContainer });
-}
-
-const handleTodo = (e) => {
-  deleteTodo(e);
-  setChecker(e);
 };
 
 const deleteTodo = (e) => {
-  if (e.target.className === 'app-body_deleteTodo') {
-    const filteredTodos = todos.filter((todo) => todo.id != e.target.id);
-    todos = filteredTodos;
-    localStorage.setItem('todos', JSON.stringify(todos));
-    todoContainer.innerHTML = '';
-    console.log('filterTodos acted');
-    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
-  }
+  const filteredTodos = todos.filter((todo) => todo.id != e.target.id);
+  todos = filteredTodos;
+  localStorage.setItem('todos', JSON.stringify(todos));
+  todoContainer.innerHTML = '';
 };
 const setChecker = (e) => {
-  if (e.target.className === 'app-body_checkbox') {
-    const checkingTodo = todos.find((todo) => todo.id + 1 == e.target.id);
-    checkingTodo.checked = !checkingTodo.checked;
-    e.target.checked = checkingTodo.checked;
-    localStorage.setItem('todos', JSON.stringify(todos));
-    todoContainer.innerHTML = '';
-    if (checkingTodo.checked) {
-      e.target.className = 'completed';
-    } else e.target.className = 'notCompleted';
+  const checkingTodo = todos.find((todo) => todo.id + 1 == e.target.id);
+  checkingTodo.checked = !checkingTodo.checked;
+  localStorage.setItem('todos', JSON.stringify(todos));
+  if (checkingTodo.checked) {
+    e.target.className = 'completed';
+  } else e.target.className = 'notCompleted';
+};
+
+const editTodo = (e) => {
+  const todoBody = e.target.parentNode;
+  const todoText = todoBody.querySelector('.app-body_todoInfo');
+  const todoValue = todoText.innerHTML;
+  const todoInput = todoBody.querySelector('.app-body_todoInput');
+  todoInput.classList.remove('app-body_todoItem-hidden');
+  todoText.classList.add('app-body_todoItem-hidden');
+  todoInput.setAttribute('value', todoValue);
+  todoInput.value = todoValue;
+};
+
+const updateTodo = (e) => {
+  const todoBody = e.target.parentNode;
+  const todoText = todoBody.querySelector('.app-body_todoInfo');
+  const todoId = todoBody.querySelector('.app-body_deleteTodo').id;
+  const todoInput = todoBody.querySelector('.app-body_todoInput');
+  const editedTodo = todos.find((todo) => todo.id === Number(todoId));
+  editedTodo.text = todoInput.value;
+  localStorage.setItem('todos', JSON.stringify(todos));
+  todoInput.classList.add('app-body_todoItem-hidden');
+  todoText.classList.remove('app-body_todoItem-hidden');
+};
+
+const handleTodo = (e) => {
+  if (e.target.className === 'app-body_deleteTodo') {
+    deleteTodo(e);
+    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
   }
-  filterTodos({ todos, filterValue, todoPrinter, todoContainer });
-}; /////////////////не меняется состояние чекера
+  if (e.target.className === 'app-body_checkbox') {
+    setChecker(e);
+    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+  }
+  if (e.target.className === 'app-body_editTodo') {
+    editTodo(e);
+  }
+  if (e.target.className === 'app-body_updateTodo') {
+    updateTodo(e);
+  }
+};
 
 window.addEventListener('load', loadHandler);
 
