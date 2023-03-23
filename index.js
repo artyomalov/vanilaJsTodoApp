@@ -6,10 +6,20 @@ let todos = [];
 const todoContainer = document.querySelector(".app-body");
 const todoInput = document.querySelector(".app-header__input");
 const addTodoButton = document.querySelector(".app-header__button");
+const filterValue = localStorage.getItem("filterState") ?? "all";
+console.log(filterValue);
+const todoSelector = document.querySelectorAll(
+  ".app-header__todo-status-selector"
+);
 
 const loadHandler = () => {
   todos = getLocalStorageInfo("todos");
-  todoPrinter(todos, todoContainer, deleteTodo);
+  for (let radio of todoSelector) {
+    if (radio.value === filterValue) {
+      radio.checked = true;
+    }
+  }
+  filterTodos({ todos, filterValue, todoPrinter, todoContainer });
 };
 
 function addTodoHandler() {
@@ -42,9 +52,7 @@ const deleteTodo = (e) => {
 };
 const setChecker = (e) => {
   if (e.target.className === "app-body_checkbox") {
-    const checkingTodo = todos.find((todo) => {
-      return todo.id + 1 == e.target.id;
-    });
+    const checkingTodo = todos.find((todo) => todo.id + 1 == e.target.id);
     checkingTodo.checked = !checkingTodo.checked;
     e.target.checked = checkingTodo.checked;
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -52,8 +60,8 @@ const setChecker = (e) => {
     if (checkingTodo.checked) {
       e.target.className = "completed";
     } else e.target.className = "notCompleted";
-    todoPrinter(todos, todoContainer);
   }
+  filterTodos({ todos, filterValue, todoPrinter, todoContainer });
 }; /////////////////не меняется состояние чекера
 
 window.addEventListener("load", loadHandler);
@@ -66,12 +74,10 @@ todoInput.addEventListener("keydown", (e) => {
 });
 todoContainer.addEventListener("click", (e) => handleTodo(e));
 
-const todoSelector = document.querySelectorAll(
-  ".app-header__todo-status-selector"
-);
-
 for (const radio of todoSelector) {
-  radio.addEventListener("click", () =>
-    filterTodos({ todos, radio, todoPrinter, todoContainer })
-  );
+  radio.addEventListener("click", () => {
+    localStorage.setItem("filterState", radio.value);
+    const filterValue = radio.value;
+    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+  });
 }

@@ -1,14 +1,14 @@
 import filterTodos from "./filterTodos.js";
 
-export default function todoPrinter(todos, container) {
+export default function todoPrinter(todos, container, activeTodoCounter = "0") {
   if (!todos.length) {
     container.innerHTML = "<h2>No todos</h2>";
     return;
   }
 
   const counter = document.querySelector(".app-header__counter");
-  const activeTodoCounter = todos.filter((todo) => todo.checked === false);
-  counter.innerHTML = activeTodoCounter.length;
+  counter.innerHTML = activeTodoCounter;
+
   container.innerHTML = "";
   todos.forEach((todo) => {
     const checkerId = todo.id + 1;

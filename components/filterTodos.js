@@ -1,14 +1,15 @@
-const filterTodos = ({ todos, radio, todoPrinter, todoContainer }) => {
-  let filterSelector = "active";
+const filterTodos = ({ todos, filterValue, todoPrinter, todoContainer }) => {
+  const activeTodoCounter = todos.filter(
+    (todo) => todo.checked === false
+  ).length;
 
-  filterSelector = radio.value;
-
-  if (filterSelector === "completed") {
+  if (filterValue === "completed") {
     const completedTodos = todos.filter((todo) => todo.checked === true);
-    todoPrinter(completedTodos, todoContainer);
-  } else if (filterSelector === "active") {
+    todoPrinter(completedTodos, todoContainer, activeTodoCounter);
+  } else if (filterValue === "active") {
     const activeTodos = todos.filter((todo) => todo.checked === false);
-    todoPrinter(activeTodos, todoContainer);
-  } else todoPrinter(todos, todoContainer);
+    todoPrinter(activeTodos, todoContainer, activeTodoCounter);
+  } else todoPrinter(todos, todoContainer, activeTodoCounter);
 };
+
 export default filterTodos;
