@@ -1,5 +1,6 @@
 const filterTodos = ({ todos, filterValue, todoPrinter, todoContainer }) => {
   const completedTodos = todos.filter((todo) => todo.checked === true);
+
   const activeTodos = todos.filter((todo) => todo.checked === false);
   const activeTodoCounter = activeTodos.length;
   // console.log(filterValue);

@@ -22,7 +22,6 @@ const loadHandler = () => {
 };
 
 function addTodoHandler() {
-  /////////////////////////////////////////////////////////////
   const newTodo = {
     id: Date.now(),
     text: todoInput.value,
@@ -47,7 +46,6 @@ const deleteTodo = (e) => {
     const filteredTodos = todos.filter((todo) => todo.id != e.target.id);
     todos = filteredTodos;
     localStorage.setItem("todos", JSON.stringify(todos));
-    // console.log("filterTodos");
     todoContainer.innerHTML = "";
     console.log("filterTodos acted");
     filterTodos({ todos, filterValue, todoPrinter, todoContainer });
