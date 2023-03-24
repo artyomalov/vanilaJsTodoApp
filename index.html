@@ -12,38 +12,52 @@
       <div class="container">
         <div class="app-header">
           <h1 class="app-header__title">Todo app</h1>
+          <h2 class="app-header__todo-counter">
+            Active tasks: <span class="app-header__counter">0</span>
+          </h2>
           <form class="app-header__form">
-            <input type="text" class="app-header__input" value="" />
-            <button type="button" id="addButton" class="app-header__button">
-              Add todo
-            </button>
-            <button type="button" id="editButton" class="app-header__button">
-              Add todo
-            </button>
-            <h2>Active tasks: <span class="app-header__counter">0</span></h2>
-            <input
-              class="app-header__todo-status-selector"
-              type="radio"
-              name="todoSelector"
-              id="all"
-              value="all"
-            />
-            <label for="all" checked>all</label>
-            <input
-              class="app-header__todo-status-selector"
-              type="radio"
-              name="todoSelector"
-              id="activeTasks"
-              value="active"
-            />
-            <label for="active"> active </label>
-            <input
-              class="app-header__todo-status-selector"
-              type="radio"
-              name="todoSelector"
-              value="completed"
-            />
-            <label for="completed">completed</label>
+            <div class="app-header__input-container">
+              <input
+                type="text"
+                class="app-header__input"
+                value=""
+                placeholder="your task"
+              />
+              <button type="button" id="addButton" class="app-header__button">
+                Add todo
+              </button>
+            </div>
+            <div class="app-header__todo-status-container">
+              <div class="app-header__selector-container">
+                <input
+                  class="app-header__todo-status-selector"
+                  type="radio"
+                  name="todoSelector"
+                  id="all"
+                  value="all"
+                />
+                <label for="all" checked>all</label>
+              </div>
+              <div class="app-header__selector-container">
+                <input
+                  class="app-header__todo-status-selector"
+                  type="radio"
+                  name="todoSelector"
+                  id="activeTasks"
+                  value="active"
+                />
+                <label for="active"> active </label>
+              </div>
+              <div class="app-header__selector-container">
+                <input
+                  class="app-header__todo-status-selector"
+                  type="radio"
+                  name="todoSelector"
+                  value="completed"
+                />
+                <label for="completed">completed</label>
+              </div>
+            </div>
           </form>
         </div>
         <div class="app-body"></div>

@@ -3,14 +3,13 @@ import getLocalStorageInfo from './components/getLocalStorageInfo.js';
 import filterTodos from './components/filterTodos.js';
 let todos = [];
 let filterValue = localStorage.getItem('filterState') ?? 'all';
-let todoId = 0;
-let editSetter = false;
 const todoContainer = document.querySelector('.app-body');
 const todoInput = document.querySelector('.app-header__input');
 const addTodoButton = document.querySelector('#addButton');
 const todoSelector = document.querySelectorAll(
   '.app-header__todo-status-selector'
 );
+
 const loadHandler = () => {
   todos = getLocalStorageInfo('todos');
   for (let radio of todoSelector) {
@@ -30,9 +29,7 @@ const addTodoHandler = () => {
   const todoList = [...todos, newTodo];
   todos = todoList;
   localStorage.setItem('todos', JSON.stringify(todos));
-  todoContainer.innerHTML = '';
   todoInput.value = '';
-
   filterTodos({ todos, filterValue, todoPrinter, todoContainer });
 };
 
@@ -40,8 +37,8 @@ const deleteTodo = (e) => {
   const filteredTodos = todos.filter((todo) => todo.id != e.target.id);
   todos = filteredTodos;
   localStorage.setItem('todos', JSON.stringify(todos));
-  todoContainer.innerHTML = '';
 };
+
 const setChecker = (e) => {
   const checkingTodo = todos.find((todo) => todo.id + 1 == e.target.id);
   checkingTodo.checked = !checkingTodo.checked;
@@ -53,15 +50,15 @@ const setChecker = (e) => {
 
 const editTodo = (e) => {
   e.target.classList.add('app-body_editButton-hidden');
-  const todoBody = e.target.parentNode;
+  const todoBody = e.target.closest('.app-body_todoItem');
   todoBody
     .querySelector('.app-body_updateTodo')
     .classList.remove('app-body_editButton-hidden');
   const todoText = todoBody.querySelector('.app-body_todoInfo');
   const todoValue = todoText.innerHTML;
   const todoInput = todoBody.querySelector('.app-body_todoInput');
-  todoInput.classList.remove('app-body_todoItem-hidden');
-  todoText.classList.add('app-body_todoItem-hidden');
+  todoInput.classList.remove('app-body_todoInfo-hidden');
+  todoText.classList.add('app-body_todoInfo-hidden');
   todoInput.setAttribute('value', todoValue);
   todoInput.value = todoValue;
 
@@ -76,7 +73,7 @@ const editTodo = (e) => {
 
 const updateTodo = (e) => {
   e.target.classList.add('app-body_editButton-hidden');
-  const todoBody = e.target.parentNode;
+  const todoBody = e.target.closest('.app-body_todoItem');
   todoBody
     .querySelector('.app-body_editTodo')
     .classList.remove('app-body_editButton-hidden');
@@ -87,8 +84,8 @@ const updateTodo = (e) => {
   const editedTodo = todos.find((todo) => todo.id === Number(todoId));
   editedTodo.text = todoInput.value;
   localStorage.setItem('todos', JSON.stringify(todos));
-  todoInput.classList.add('app-body_todoItem-hidden');
-  todoText.classList.remove('app-body_todoItem-hidden');
+  todoInput.classList.add('app-body_todoInfo-hidden');
+  todoText.classList.remove('app-body_todoInfo-hidden');
 };
 
 const handleTodo = (e) => {
