@@ -9,13 +9,15 @@ export default function todoPrinter(todos, container, activeTodoCounter) {
   container.innerHTML = '';
   todos.forEach((todo) => {
     const checker = todo.checked === true ? 'checked' : '';
+    const completedTodoDecoraton =
+      todo.checked === true ? 'style="text-decoration: line-through"' : '';
     const checkerId = todo.id + 1;
     const editId = todo.id + 2;
     container.insertAdjacentHTML(
       'afterbegin',
       `<div class="app-body_todoItem">
       <input id=${checkerId} type="checkbox" ${checker} class="app-body_checkbox"} />
-      <span class="app-body_todoInfo">${todo.text}</span>
+      <span class="app-body_todoInfo" ${completedTodoDecoraton}>${todo.text}</span>
       <input class="app-body_todoInput app-body_todoInfo-hidden" value ="hello" type="text" />
       <div class="app-body_icons-container">
       <span class="app-body_editTodo" id="${editId}">&#9998;</span>

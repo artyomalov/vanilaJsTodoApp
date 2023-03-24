@@ -21,7 +21,7 @@ const loadHandler = () => {
 };
 
 const addTodoHandler = () => {
-  if (todoInput.value) {
+  if (todoInput.value.trim().length) {
     const newTodo = {
       id: Date.now(),
       text: todoInput.value,
@@ -50,41 +50,41 @@ const setChecker = (e) => {
 const editTodo = (e) => {
   e.target.classList.add('app-body_editButton-hidden');
   const todoBody = e.target.closest('.app-body_todoItem');
-  todoBody
-    .querySelector('.app-body_updateTodo')
-    .classList.remove('app-body_editButton-hidden');
+  const updateTodoButton = todoBody.querySelector('.app-body_updateTodo');
+  updateTodoButton.classList.remove('app-body_editButton-hidden');
+
   const todoText = todoBody.querySelector('.app-body_todoInfo');
   const todoValue = todoText.innerHTML;
   const todoInput = todoBody.querySelector('.app-body_todoInput');
   todoInput.classList.remove('app-body_todoInfo-hidden');
-  todoText.classList.add('app-body_todoInfo-hidden');
   todoInput.setAttribute('value', todoValue);
-  todoInput.value = todoValue;
 
-  todoInput.addEventListener('keydown', (e) => {
-    if (e.which == 13 || e.keyCode == 13) {
-      e.preventDefault();
-      updateTodo(e);
-      filterTodos({ todos, filterValue, todoPrinter, todoContainer });
-    }
-  });
+  todoText.classList.add('app-body_todoInfo-hidden');
+
+  return { todoInput, todoBody };
 };
 
 const updateTodo = (e) => {
-  e.target.classList.add('app-body_editButton-hidden');
-  const todoBody = e.target.closest('.app-body_todoItem');
-  todoBody
-    .querySelector('.app-body_editTodo')
-    .classList.remove('app-body_editButton-hidden');
+  const flag = e.className === 'app-body_todoItem';
+  const todoBody = flag === true ? e : e.target.closest('.app-body_todoItem');
   const todoText = todoBody.querySelector('.app-body_todoInfo');
   const todoId = todoBody.querySelector('.app-body_deleteTodo').id;
   const todoInput = todoBody.querySelector('.app-body_todoInput');
-
-  const editedTodo = todos.find((todo) => todo.id === Number(todoId));
-  editedTodo.text = todoInput.value;
-  localStorage.setItem('todos', JSON.stringify(todos));
-  todoInput.classList.add('app-body_todoInfo-hidden');
-  todoText.classList.remove('app-body_todoInfo-hidden');
+  if (todoInput.value.trim().length) {
+    const editedTodo = todos.find((todo) => todo.id === Number(todoId));
+    editedTodo.text = todoInput.value;
+    localStorage.setItem('todos', JSON.stringify(todos));
+    todoInput.classList.add('app-body_todoInfo-hidden');
+    todoText.classList.remove('app-body_todoInfo-hidden');
+    todoBody
+      .querySelector('.app-body_updateTodo')
+      .classList.remove('app-body_editButton-hidden');
+    todoBody
+      .querySelector('.app-body_editTodo')
+      .classList.remove('app-body_editButton-hidden');
+    return true;
+  }
+  return false;
 };
 
 const handleTodo = (e) => {
@@ -97,11 +97,23 @@ const handleTodo = (e) => {
     filterTodos({ todos, filterValue, todoPrinter, todoContainer });
   }
   if (e.target.className === 'app-body_editTodo') {
-    editTodo(e);
+    const todoData = editTodo(e);
+    todoData.todoInput.addEventListener('keydown', (e) => {
+      if (e.which == 13 || e.keyCode == 13) {
+        e.preventDefault();
+        const todoUpdater = updateTodo(todoData.todoBody);
+        if (todoUpdater) {
+          filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+        }
+      }
+    });
   }
   if (e.target.className === 'app-body_updateTodo') {
-    updateTodo(e);
-    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+    const todoUpdater = updateTodo(e);
+
+    if (todoUpdater) {
+      filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+    }
   }
 };
 
