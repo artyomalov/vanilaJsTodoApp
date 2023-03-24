@@ -61,7 +61,7 @@ text-align: center;}
   cursor: pointer;
 }
 .app-header__button:hover {
-  background-color: rgb(85, 147, 228);
+  background-color: rgb(63, 110, 172);
   color: white
 }
 
@@ -123,7 +123,7 @@ text-align: center;}
 }
 
 .app-body_editTodo:hover, .app-body_deleteTodo:hover {
- color: rgb(85, 147, 228)
+ color: rgb(63, 110, 172);
    
 }
 

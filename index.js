@@ -21,16 +21,18 @@ const loadHandler = () => {
 };
 
 const addTodoHandler = () => {
-  const newTodo = {
-    id: Date.now(),
-    text: todoInput.value,
-    checked: false,
-  };
-  const todoList = [...todos, newTodo];
-  todos = todoList;
-  localStorage.setItem('todos', JSON.stringify(todos));
-  todoInput.value = '';
-  filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+  if (todoInput.value) {
+    const newTodo = {
+      id: Date.now(),
+      text: todoInput.value,
+      checked: false,
+    };
+    const todoList = [...todos, newTodo];
+    todos = todoList;
+    localStorage.setItem('todos', JSON.stringify(todos));
+    todoInput.value = '';
+    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+  }
 };
 
 const deleteTodo = (e) => {
