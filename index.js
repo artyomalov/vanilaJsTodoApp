@@ -52,7 +52,11 @@ const setChecker = (e) => {
 };
 
 const editTodo = (e) => {
+  e.target.classList.add('app-body_editButton-hidden');
   const todoBody = e.target.parentNode;
+  todoBody
+    .querySelector('.app-body_updateTodo')
+    .classList.remove('app-body_editButton-hidden');
   const todoText = todoBody.querySelector('.app-body_todoInfo');
   const todoValue = todoText.innerHTML;
   const todoInput = todoBody.querySelector('.app-body_todoInput');
@@ -60,13 +64,26 @@ const editTodo = (e) => {
   todoText.classList.add('app-body_todoItem-hidden');
   todoInput.setAttribute('value', todoValue);
   todoInput.value = todoValue;
+
+  todoInput.addEventListener('keydown', (e) => {
+    if (e.which == 13 || e.keyCode == 13) {
+      e.preventDefault();
+      updateTodo(e);
+      filterTodos({ todos, filterValue, todoPrinter, todoContainer });
+    }
+  });
 };
 
 const updateTodo = (e) => {
+  e.target.classList.add('app-body_editButton-hidden');
   const todoBody = e.target.parentNode;
+  todoBody
+    .querySelector('.app-body_editTodo')
+    .classList.remove('app-body_editButton-hidden');
   const todoText = todoBody.querySelector('.app-body_todoInfo');
   const todoId = todoBody.querySelector('.app-body_deleteTodo').id;
   const todoInput = todoBody.querySelector('.app-body_todoInput');
+
   const editedTodo = todos.find((todo) => todo.id === Number(todoId));
   editedTodo.text = todoInput.value;
   localStorage.setItem('todos', JSON.stringify(todos));
@@ -88,6 +105,7 @@ const handleTodo = (e) => {
   }
   if (e.target.className === 'app-body_updateTodo') {
     updateTodo(e);
+    filterTodos({ todos, filterValue, todoPrinter, todoContainer });
   }
 };
 

@@ -1,3 +1,7 @@
 .app-body_todoItem-hidden {
   display: none;
 }
+
+.app-body_editButton-hidden {
+  display: none;
+}

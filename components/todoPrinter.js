@@ -18,7 +18,7 @@ export default function todoPrinter(todos, container, activeTodoCounter) {
       <span class="app-body_todoInfo">${todo.text}</span>
       <input class="app-body_todoInput app-body_todoItem-hidden" value ="hello" type="text" />
       <span class="app-body_editTodo" id="${editId}">&#9998;</span>
-      <span class="app-body_updateTodo" id="${editId}">&check;</span>
+      <span class="app-body_updateTodo app-body_editButton-hidden" id="${editId}">&check;</span>
       <span class="app-body_deleteTodo" id=${todo.id}>&times;</span>
       </div>`
     );
