@@ -45,9 +45,6 @@ const setChecker = (e) => {
   const checkingTodo = todos.find((todo) => todo.id + 1 == e.target.id);
   checkingTodo.checked = !checkingTodo.checked;
   localStorage.setItem('todos', JSON.stringify(todos));
-  if (checkingTodo.checked) {
-    e.target.className = 'completed';
-  } else e.target.className = 'notCompleted';
 };
 
 const editTodo = (e) => {
