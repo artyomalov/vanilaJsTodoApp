@@ -1,14 +1,31 @@
 const filterTodos = ({ todos, filterValue, todoPrinter, todoContainer }) => {
-  const completedTodos = todos.filter((todo) => todo.checked === true);
-
-  const activeTodos = todos.filter((todo) => todo.checked === false);
+  const activeTodos = todos.filter((todo) => !todo.checked);
   const activeTodoCounter = activeTodos.length;
-  // console.log(filterValue);
-  if (filterValue === "completed") {
-    todoPrinter(completedTodos, todoContainer, activeTodoCounter);
-  } else if (filterValue === "active") {
-    // const activeTodos = todos.filter((todo) => todo.checked === false);
-    todoPrinter(activeTodos, todoContainer, activeTodoCounter);
-  } else todoPrinter(todos, todoContainer, activeTodoCounter);
+  let filteredTodos = todos;
+
+  if (filterValue === 'completed') {
+    filteredTodos = todos.filter((todo) => todo.checked);
+  }
+  if (filterValue === 'active') {
+    filteredTodos = activeTodos;
+  }
+  return todoPrinter(filteredTodos, todoContainer, activeTodoCounter);
 };
 export default filterTodos;
+
+// const filterTodos = ({ todos, filterValue, todoPrinter, todoContainer }) => {
+//   const activeTodos = todos.filter((todo) => !todo.checked);
+//   const activeTodoCounter = activeTodos.length;
+//   let todosToRender = todos;
+
+//   if (filterValue === 'completed') {
+//     todosToRender = todos.filter((todo) => todo.checked);
+//   }
+
+//   if (filterValue === 'active') {
+//     completedTodos = activeTodos;
+//   }
+
+//   todoPrinter(todosToRender, todoContainer, activeTodoCounter);
+// };
+// export default filterTodos;

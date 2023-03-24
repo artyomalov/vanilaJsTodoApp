@@ -14,8 +14,13 @@
 }
 
 .app-header {
+  width: 300px;
   margin-top: 40px;
-text-align: center;}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
 
 .app-header__title {
   font-size: 35px;
@@ -36,11 +41,11 @@ text-align: center;}
 }
 
 .app-header__input-container {
-  margin-top: 15px;
-  width: 280px;
+  margin-top: 19px;
+  width: 100%;
   height: 30px;
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 .app-header__input {
@@ -48,7 +53,7 @@ text-align: center;}
   padding-left: 10px;
   height: 40px;
   border-radius: 5px;
-  border: 2px solid lightgray
+  border: 2px solid lightgray;
 }
 
 .app-header__button {
@@ -57,12 +62,12 @@ text-align: center;}
   border-radius: 5px;
   border: 2px solid lightgray;
   background-color: transparent;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
   cursor: pointer;
 }
 .app-header__button:hover {
   background-color: rgb(63, 110, 172);
-  color: white
+  color: white;
 }
 
 .app-header__todo-status-container {
@@ -72,7 +77,6 @@ text-align: center;}
   justify-content: space-between;
   align-items: center;
 }
-
 
 .app-body {
   width: 100%;
@@ -94,11 +98,11 @@ text-align: center;}
   border-radius: 5px;
 }
 
-.app-body_todoInfo, .app-body_todoInput {
+.app-body_todoInfo,
+.app-body_todoInput {
   display: inline-block;
   padding-left: 10px;
   width: 50%;
-
 }
 .app-body_todoInput {
   height: 30px;
@@ -116,18 +120,20 @@ text-align: center;}
   display: none;
 }
 
-.app-body_editTodo, .app-body_deleteTodo, .app-body_updateTodo {
+.app-body_editTodo,
+.app-body_deleteTodo,
+.app-body_updateTodo {
   cursor: pointer;
-  transition: all .2s linear;
-
+  transition: all 0.2s linear;
 }
 
-.app-body_editTodo:hover, .app-body_deleteTodo:hover, .app-body_updateTodo {
- color: rgb(63, 110, 172);
-   
+.app-body_editTodo:hover,
+.app-body_deleteTodo:hover,
+.app-body_updateTodo {
+  color: rgb(63, 110, 172);
 }
 
-.app-body_checkbox, .app-header__todo-status-selector {
+.app-body_checkbox,
+.app-header__todo-status-selector {
   cursor: pointer;
 }
-

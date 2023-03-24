@@ -16,14 +16,16 @@ export default function todoPrinter(todos, container, activeTodoCounter) {
     container.insertAdjacentHTML(
       'afterbegin',
       `<div class="app-body_todoItem">
-      <input id=${checkerId} type="checkbox" ${checker} class="app-body_checkbox"} />
-      <span class="app-body_todoInfo" ${completedTodoDecoraton}>${todo.text}</span>
-      <input class="app-body_todoInput app-body_todoInfo-hidden" value ="hello" type="text" />
-      <div class="app-body_icons-container">
-      <span class="app-body_editTodo" id="${editId}">&#9998;</span>
-      <span class="app-body_updateTodo app-body_editButton-hidden" id="${editId}">&check;</span>
-      <span class="app-body_deleteTodo" id=${todo.id}>&times;</span>
-      </div>
+        <input id=${checkerId} type="checkbox" ${checker} class="app-body_checkbox"} />
+        <span class="app-body_todoInfo" ${completedTodoDecoraton}>${todo.text}</span>
+        <input class="app-body_todoInput app-body_todoInfo-hidden" value ="hello" type="text" />
+
+        <div class="app-body_icons-container">
+          <span class="app-body_editTodo" id="${editId}">&#9998;</span>
+          <span class="app-body_updateTodo app-body_editButton-hidden" id="${editId}">&check;</span>
+          <span class="app-body_deleteTodo" id=${todo.id}>&times;</span>
+        </div>
+        
       </div>`
     );
   });

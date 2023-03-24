@@ -1,6 +1,7 @@
 import todoPrinter from './components/todoPrinter.js';
 import getLocalStorageInfo from './components/getLocalStorageInfo.js';
 import filterTodos from './components/filterTodos.js';
+
 let todos = [];
 let filterValue = localStorage.getItem('filterState') ?? 'all';
 const todoContainer = document.querySelector('.app-body');
@@ -23,7 +24,7 @@ const loadHandler = () => {
 const addTodoHandler = () => {
   if (todoInput.value.trim().length) {
     const newTodo = {
-      id: Date.now(),
+      id: String.fromCharCode(65 + Math.floor(Math.random() * 26)) + Date.now(),
       text: todoInput.value,
       checked: false,
     };
@@ -47,41 +48,46 @@ const setChecker = (e) => {
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-const editTodo = (e) => {
-  e.target.classList.add('app-body_editButton-hidden');
-  const todoBody = e.target.closest('.app-body_todoItem');
-  const updateTodoButton = todoBody.querySelector('.app-body_updateTodo');
-  updateTodoButton.classList.remove('app-body_editButton-hidden');
+const hideTextClass = 'app-body_todoInfo-hidden';
+const hideButtonClass = 'app-body_editButton-hidden';
+const buttonParrent = '.app-body_todoItem';
+const updateButton = '.app-body_updateTodo';
+const todoTitle = '.app-body_todoInfo';
+const todoEditorInput = '.app-body_todoInput';
 
-  const todoText = todoBody.querySelector('.app-body_todoInfo');
+const editTodo = (e) => {
+  e.target.classList.add(hideButtonClass);
+  const todoBody = e.target.closest(buttonParrent);
+  const updateTodoButton = todoBody.querySelector(updateButton);
+  updateTodoButton.classList.remove(hideButtonClass);
+
+  const todoText = todoBody.querySelector(todoTitle);
   const todoValue = todoText.innerHTML;
-  const todoInput = todoBody.querySelector('.app-body_todoInput');
-  todoInput.classList.remove('app-body_todoInfo-hidden');
+  const todoInput = todoBody.querySelector(todoEditorInput);
+  todoInput.classList.remove(hideTextClass);
   todoInput.setAttribute('value', todoValue);
 
-  todoText.classList.add('app-body_todoInfo-hidden');
+  todoText.classList.add(hideTextClass);
 
   return { todoInput, todoBody };
 };
 
 const updateTodo = (e) => {
   const flag = e.className === 'app-body_todoItem';
-  const todoBody = flag === true ? e : e.target.closest('.app-body_todoItem');
-  const todoText = todoBody.querySelector('.app-body_todoInfo');
+  const todoBody = flag === true ? e : e.target.closest(buttonParrent);
+  const todoText = todoBody.querySelector(todoTitle);
   const todoId = todoBody.querySelector('.app-body_deleteTodo').id;
-  const todoInput = todoBody.querySelector('.app-body_todoInput');
+  const todoInput = todoBody.querySelector(todoEditorInput);
   if (todoInput.value.trim().length) {
-    const editedTodo = todos.find((todo) => todo.id === Number(todoId));
+    const editedTodo = todos.find((todo) => todo.id === todoId);
     editedTodo.text = todoInput.value;
     localStorage.setItem('todos', JSON.stringify(todos));
-    todoInput.classList.add('app-body_todoInfo-hidden');
-    todoText.classList.remove('app-body_todoInfo-hidden');
-    todoBody
-      .querySelector('.app-body_updateTodo')
-      .classList.remove('app-body_editButton-hidden');
+    todoInput.classList.add(hideTextClass);
+    todoText.classList.remove(hideTextClass);
+    todoBody.querySelector(updateButton).classList.remove(hideButtonClass);
     todoBody
       .querySelector('.app-body_editTodo')
-      .classList.remove('app-body_editButton-hidden');
+      .classList.remove(hideButtonClass);
     return true;
   }
   return false;
@@ -97,14 +103,20 @@ const handleTodo = (e) => {
     filterTodos({ todos, filterValue, todoPrinter, todoContainer });
   }
   if (e.target.className === 'app-body_editTodo') {
-    const todoData = editTodo(e);
-    todoData.todoInput.addEventListener('keydown', (e) => {
+    const { todoInput, todoBody } = editTodo(e);
+    todoInput.addEventListener('keydown', (e) => {
       if (e.which == 13 || e.keyCode == 13) {
         e.preventDefault();
-        const todoUpdater = updateTodo(todoData.todoBody);
+        const todoUpdater = updateTodo(todoBody);
         if (todoUpdater) {
           filterTodos({ todos, filterValue, todoPrinter, todoContainer });
         }
+      }
+    });
+    todoInput.addEventListener('blur', (e) => {
+      const todoUpdater = updateTodo(todoBody);
+      if (todoUpdater) {
+        filterTodos({ todos, filterValue, todoPrinter, todoContainer });
       }
     });
   }
